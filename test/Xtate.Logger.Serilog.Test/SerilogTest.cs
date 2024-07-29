@@ -49,10 +49,12 @@ public class SerilogTest
 											 ]
 										 });
 
-		await using var provider = services.BuildProvider();
+		var provider = services.BuildProvider();
 
 		var smi = await provider.GetRequiredService<IStateMachineInterpreter>();
 
 		await smi.RunAsync();
+
+		await Disposer.DisposeAsync(provider);
 	}
 }
