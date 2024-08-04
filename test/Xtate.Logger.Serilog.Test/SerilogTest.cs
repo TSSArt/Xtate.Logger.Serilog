@@ -35,7 +35,7 @@ public class SerilogTest
 					   .MinimumLevel.Verbose()
 					   .WriteTo.Console()
 					   .WriteTo.Seq("http://127.0.0.1:5341"));
-		services.RegisterStateMachineInterpreter();
+		services.AddModule<StateMachineInterpreterModule>();
 		services.AddShared<IStateMachine>(
 			SharedWithin.Container, _ => new StateMachineEntity
 										 {
