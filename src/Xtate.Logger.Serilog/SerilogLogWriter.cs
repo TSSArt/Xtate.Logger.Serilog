@@ -112,7 +112,7 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 			Level.Debug   => LogEventLevel.Debug,
 			Level.Trace   => LogEventLevel.Verbose,
 			Level.Verbose => LogEventLevel.Verbose,
-			_             => Infra.Unexpected<LogEventLevel>(level)
+			_             => throw new InvalidOperationException()
 		};
 
 	private class ParametersLogEventEnricher(IEnumerable<LoggingParameter> parameters) : ILogEventEnricher
@@ -155,7 +155,7 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 								LogLevel.Info    => LogEventLevel.Information,
 								LogLevel.Warning => LogEventLevel.Warning,
 								LogLevel.Error   => LogEventLevel.Error,
-								_                => Infra.Unexpected<LogEventLevel>(logLevel)
+								_                => throw Infra.UnexpectedValueException(logLevel)
 							};
 
 		if (!_logger.IsEnabled(logEventLevel))

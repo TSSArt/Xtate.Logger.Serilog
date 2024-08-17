@@ -68,7 +68,7 @@ public class DestructuringPolicy : IDestructuringPolicy
 			DataModelValueType.DateTime  => new ScalarValue(value.ToObject()),
 			DataModelValueType.Boolean   => new ScalarValue(value.ToObject()),
 			DataModelValueType.List      => GetLogEventPropertyValue(value.AsList()),
-			_                            => Infra.Unexpected<LogEventPropertyValue>(value.Type)
+			_                            => throw new InvalidOperationException()
 		};
 
 	private static LogEventPropertyValue GetLogEventPropertyValue(DataModelList list)
