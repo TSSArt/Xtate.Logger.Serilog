@@ -59,17 +59,17 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 
 	public bool IsEnabled(Level level) => _logger.IsEnabled(GetLogEventLevel(level));
 
-	public async ValueTask Write(Level level,
+	public ValueTask Write(Level level,
 								 int eventId,
 								 string? message,
-								 IAsyncEnumerable<LoggingParameter>? parameters)
+								 IEnumerable<LoggingParameter>? parameters)
 	{
 		List<LoggingParameter>? prms = default;
 		Exception? exception = default;
 
 		if (parameters is not null)
 		{
-			await foreach (var prm in parameters.ConfigureAwait(false))
+			foreach (var prm in parameters)
 			{
 				if (exception is null && prm is { Name: @"Exception", Value: Exception ex })
 				{
@@ -91,6 +91,8 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 		}
 
 		logger.Write(GetLogEventLevel(level), exception, message ?? string.Empty);
+
+		return default;
 	}
 
 #endregion
