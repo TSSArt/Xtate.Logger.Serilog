@@ -60,9 +60,9 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 	public bool IsEnabled(Level level) => _logger.IsEnabled(GetLogEventLevel(level));
 
 	public ValueTask Write(Level level,
-								 int eventId,
-								 string? message,
-								 IEnumerable<LoggingParameter>? parameters)
+						   int eventId,
+						   string? message,
+						   IEnumerable<LoggingParameter>? parameters)
 	{
 		List<LoggingParameter>? prms = default;
 		Exception? exception = default;

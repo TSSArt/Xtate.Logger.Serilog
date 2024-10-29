@@ -74,6 +74,7 @@ public class DestructuringPolicy : IDestructuringPolicy
 	private static LogEventPropertyValue GetLogEventPropertyValue(DataModelList list)
 	{
 		var index = 0;
+
 		foreach (var entry in list.Entries)
 		{
 			if (index ++ != entry.Index)
@@ -107,6 +108,7 @@ public class DestructuringPolicy : IDestructuringPolicy
 			foreach (var entry in list.Entries)
 			{
 				var name = GetName(entry.Key);
+
 				yield return new LogEventProperty(name, GetLogEventPropertyValue(entry.Value));
 
 				if (showIndex)
