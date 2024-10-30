@@ -379,7 +379,7 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 			var logger = _logger.ForContext(new LoggerEnricher(_loggerContext, LogEventType.InterpreterState, IsVerbose))
 								.ForContext(new OutgoingEventEnricher(_loggerContext, outgoingEvent, IsVerbose));
 
-			logger.Debug(messageTemplate: @"Send event '{EventName}'", EventName.ToName(outgoingEvent.NameParts));
+			logger.Debug(messageTemplate: @"Send event '{EventName}'", EventName.ToName(outgoingEvent.Name));
 		}
 
 		return default;
@@ -526,9 +526,9 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 
 		public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
 		{
-			if (!_event.NameParts.IsDefaultOrEmpty)
+			if (!_event.Name.IsDefaultOrEmpty)
 			{
-				logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(name: @"EventName", EventName.ToName(_event.NameParts)));
+				logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(name: @"EventName", EventName.ToName(_event.Name)));
 			}
 
 			logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(name: @"EventType", _event.Type));
@@ -580,9 +580,9 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 
 		public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
 		{
-			if (!_outgoingEvent.NameParts.IsDefaultOrEmpty)
+			if (!_outgoingEvent.Name.IsDefaultOrEmpty)
 			{
-				logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(name: @"EventName", EventName.ToName(_outgoingEvent.NameParts)));
+				logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(name: @"EventName", EventName.ToName(_outgoingEvent.Name)));
 			}
 
 			logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty(name: @"EventType", _outgoingEvent.Type));
