@@ -17,26 +17,17 @@
 
 using System;
 using Serilog;
-using Xtate.Core;
-using Xtate.IoC;
 
 namespace Xtate;
 
-public static class LoggerSerilogExtensions
+public class SerilogLogWriterConfiguration
 {
-	public static void RegisterSerilogLogger(this IServiceCollection services)
+	public SerilogLogWriterConfiguration(Action<LoggerConfiguration> options)
 	{
-		services.RegisterSerilogLogger(configuration => configuration.WriteTo.Console());
+		Value = new LoggerConfiguration();
+
+		options(Value);
 	}
 
-	public static void RegisterSerilogLogger(this IServiceCollection services, Action<LoggerConfiguration> options)
-	{
-		if (services.IsRegistered<SerilogLogWriter>())
-		{
-			return;
-		}
-
-		services.AddTransient(_ => new SerilogLogWriterConfiguration(options));
-		services.AddImplementation<SerilogLogWriter>().For<ILogWriter>();
-	}
+	public LoggerConfiguration Value { get; }
 }

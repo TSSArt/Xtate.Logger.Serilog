@@ -51,6 +51,20 @@ public class DestructuringPolicy : IDestructuringPolicy
 			return true;
 		}
 
+		if (value is EventName eventName)
+		{
+			result = new ScalarValue(eventName.ToString());
+
+			return true;
+		}
+
+		if (value is EventDescriptor eventDescriptor)
+		{
+			result = new ScalarValue(eventDescriptor.ToString());
+
+			return true;
+		}
+
 		result = default;
 
 		return false;

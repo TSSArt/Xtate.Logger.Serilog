@@ -18,26 +18,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Xtate.Core;
 
 namespace Xtate;
 
-public class SerilogLogWriterConfiguration
-{
-	public SerilogLogWriterConfiguration(Action<LoggerConfiguration> options)
-	{
-		Value = new LoggerConfiguration();
-
-		options(Value);
-	}
-
-	public LoggerConfiguration Value { get; }
-}
-
-public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configuration) : ILogWriter<TSource>, IDisposable
+public class SerilogLogWriter(SerilogLogWriterConfiguration configuration) : ILogWriter, IDisposable
 {
 	private readonly Logger _logger =
 		configuration
@@ -55,11 +42,12 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 
 #endregion
 
-#region Interface ILogWriter<TSource>
+#region Interface ILogWriter
 
-	public bool IsEnabled(Level level) => _logger.IsEnabled(GetLogEventLevel(level));
+	public bool IsEnabled(Type source, Level level) => _logger.IsEnabled(GetLogEventLevel(level));
 
-	public ValueTask Write(Level level,
+	public ValueTask Write(Type source,
+						   Level level,
 						   int eventId,
 						   string? message,
 						   IEnumerable<LoggingParameter>? parameters)
@@ -83,7 +71,7 @@ public class SerilogLogWriter<TSource>(SerilogLogWriterConfiguration configurati
 			}
 		}
 
-		var logger = _logger.ForContext(typeof(TSource));
+		var logger = _logger.ForContext(source);
 
 		if (prms is not null)
 		{
