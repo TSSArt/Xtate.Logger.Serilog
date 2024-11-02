@@ -235,7 +235,7 @@ public class SerilogLogWriter(SerilogLogWriterConfiguration configuration) : ILo
 		return default;
 	}
 
-	public ValueTask TraceProcessingEvent(IEvent evt)
+	public ValueTask TraceProcessingEvent(IIncomingEvent evt)
 	{
 		if (IsTracingEnabled)
 		{
@@ -499,11 +499,11 @@ public class SerilogLogWriter(SerilogLogWriterConfiguration configuration) : ILo
 
 	private class EventEnricher : ILogEventEnricher
 	{
-		private readonly IEvent          _event;
+		private readonly IIncomingEvent          _event;
 		private readonly bool            _isVerbose;
 		private readonly ILoggerContext? _loggerContext;
 
-		public EventEnricher(ILoggerContext? loggerContext, IEvent evt, bool isVerbose)
+		public EventEnricher(ILoggerContext? loggerContext, IIncomingEvent evt, bool isVerbose)
 		{
 			_loggerContext = loggerContext;
 			_event = evt;
