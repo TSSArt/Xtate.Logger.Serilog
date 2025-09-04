@@ -1,4 +1,4 @@
-﻿// Copyright © 2019-2024 Sergii Artemenko
+﻿// Copyright © 2019-2025 Sergii Artemenko
 // 
 // This file is part of the Xtate project. <https://xtate.net/>
 // 
@@ -24,19 +24,19 @@ namespace Xtate;
 
 public static class LoggerSerilogExtensions
 {
-	public static void RegisterSerilogLogger(this IServiceCollection services)
-	{
-		services.RegisterSerilogLogger(configuration => configuration.WriteTo.Console());
-	}
+    public static void RegisterSerilogLogger(this IServiceCollection services)
+    {
+        services.RegisterSerilogLogger(configuration => configuration.WriteTo.Console());
+    }
 
-	public static void RegisterSerilogLogger(this IServiceCollection services, Action<LoggerConfiguration> options)
-	{
-		if (services.IsRegistered<SerilogLogWriter>())
-		{
-			return;
-		}
+    public static void RegisterSerilogLogger(this IServiceCollection services, Action<LoggerConfiguration> options)
+    {
+        if (services.IsRegistered<SerilogLogWriter>())
+        {
+            return;
+        }
 
-		services.AddTransient(_ => new SerilogLogWriterConfiguration(options));
-		services.AddImplementation<SerilogLogWriter>().For<ILogWriter>();
-	}
+        services.AddTransient(_ => new SerilogLogWriterConfiguration(options));
+        services.AddImplementation<SerilogLogWriter>().For<ILogWriter>();
+    }
 }

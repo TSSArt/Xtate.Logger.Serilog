@@ -1,4 +1,4 @@
-﻿// Copyright © 2019-2024 Sergii Artemenko
+﻿// Copyright © 2019-2025 Sergii Artemenko
 // 
 // This file is part of the Xtate project. <https://xtate.net/>
 // 
@@ -22,12 +22,12 @@ namespace Xtate;
 
 public class SerilogLogWriterConfiguration
 {
-	public SerilogLogWriterConfiguration(Action<LoggerConfiguration> options)
-	{
-		Value = new LoggerConfiguration();
+    public SerilogLogWriterConfiguration(Action<LoggerConfiguration> options)
+    {
+        Value = new LoggerConfiguration();
 
-		options(Value);
-	}
+        options(Value);
+    }
 
-	public LoggerConfiguration Value { get; }
+    public LoggerConfiguration Value { get; }
 }
