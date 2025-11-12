@@ -30,44 +30,38 @@ public class DestructuringPolicy : IDestructuringPolicy
 
     public bool TryDestructure(object value, ILogEventPropertyValueFactory propertyValueFactory, [NotNullWhen(true)] out LogEventPropertyValue? result)
     {
-        if (value is DataModelList list)
+        switch (value)
         {
-            result = GetLogEventPropertyValue(list);
+            case DataModelList list:
+                result = GetLogEventPropertyValue(list);
 
-            return true;
+                return true;
+
+            case ILazyValue lazyValue:
+                result = GetLogEventPropertyValue(lazyValue.Value);
+
+                return true;
+
+            case IIdentifier identifier:
+                result = new ScalarValue(identifier.Value);
+
+                return true;
+
+            case EventName eventName:
+                result = new ScalarValue(eventName.ToString());
+
+                return true;
+
+            case EventDescriptor eventDescriptor:
+                result = new ScalarValue(eventDescriptor.ToString());
+
+                return true;
+
+            default:
+                result = null;
+
+                return false;
         }
-
-        if (value is ILazyValue lazyValue)
-        {
-            result = GetLogEventPropertyValue(lazyValue.Value);
-
-            return true;
-        }
-
-        if (value is IIdentifier identifier)
-        {
-            result = new ScalarValue(identifier.Value);
-
-            return true;
-        }
-
-        if (value is EventName eventName)
-        {
-            result = new ScalarValue(eventName.ToString());
-
-            return true;
-        }
-
-        if (value is EventDescriptor eventDescriptor)
-        {
-            result = new ScalarValue(eventDescriptor.ToString());
-
-            return true;
-        }
-
-        result = default;
-
-        return false;
     }
 
 #endregion
@@ -112,7 +106,7 @@ public class DestructuringPolicy : IDestructuringPolicy
 
         if (list.Count == 0)
         {
-            return new StructureValue(Array.Empty<LogEventProperty>());
+            return new StructureValue([]);
         }
 
         return new SequenceValue(EnumerateValues());

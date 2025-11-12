@@ -18,23 +18,21 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Serilog.Core;
 using Serilog.Events;
 using Xtate.Core;
 
 namespace Xtate;
 
-public class SerilogLogWriter(SerilogLogWriterConfiguration configuration) : ILogWriter, IDisposable
+[InstantiatedByIoC]
+public class SerilogLogWriter(IOptions<SerilogLoggerOptions> options) : ILogWriter, IDisposable
 {
-    private readonly Logger _logger =
-        configuration
-            .Value
-            .Destructure.With<DestructuringPolicy>()
-            .CreateLogger();
+	private readonly Logger _logger = options.Value.CreateLogger();
 
-#region Interface IDisposable
+	#region Interface IDisposable
 
-    public void Dispose()
+	public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
@@ -52,8 +50,8 @@ public class SerilogLogWriter(SerilogLogWriterConfiguration configuration) : ILo
                            string? message,
                            IEnumerable<LoggingParameter>? parameters)
     {
-        List<LoggingParameter>? prms = default;
-        Exception? exception = default;
+        List<LoggingParameter>? prms = null;
+        Exception? exception = null;
 
         if (parameters is not null)
         {
@@ -100,7 +98,7 @@ public class SerilogLogWriter(SerilogLogWriterConfiguration configuration) : ILo
             Level.Warning => LogEventLevel.Warning,
             Level.Error   => LogEventLevel.Error,
             Level.Debug   => LogEventLevel.Debug,
-            Level.Trace   => LogEventLevel.Verbose,
+            Level.Trace   => LogEventLevel.Debug,
             Level.Verbose => LogEventLevel.Verbose,
             _             => throw new InvalidOperationException()
         };

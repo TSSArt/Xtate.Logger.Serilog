@@ -52,7 +52,7 @@ public class SerilogTest
 
         var smi = await provider.GetRequiredService<IStateMachineInterpreter>();
 
-        await smi.RunAsync();
+        await smi.Run();
 
         await Disposer.DisposeAsync(provider);
     }

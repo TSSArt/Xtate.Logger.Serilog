@@ -9,11 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Xtate.SharedContent" Version="0.*" />
-		<PackageReference Include="Serilog" Version="4.3.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-
-		<PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" PrivateAssets="all" />
+		<PackageReference Include="Xtate.SharedContent" PrivateAssets="all" />
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(UseProjectReference)'=='true'">
@@ -21,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(UseProjectReference)'==''">
-		<PackageReference Include="Xtate.Core" Version="0.*" />
+		<PackageReference Include="Xtate.Core" />
 	</ItemGroup>
 
 	<ItemGroup>

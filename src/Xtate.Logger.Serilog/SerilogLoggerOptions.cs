@@ -15,19 +15,21 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System;
+using JetBrains.Annotations;
 using Serilog;
 
 namespace Xtate;
 
-public class SerilogLogWriterConfiguration
+[InstantiatedByIoC]
+public class SerilogLoggerOptions : LoggerConfiguration
 {
-    public SerilogLogWriterConfiguration(Action<LoggerConfiguration> options)
-    {
-        Value = new LoggerConfiguration();
+	public SerilogLoggerOptions() : this(true) { }
 
-        options(Value);
-    }
-
-    public LoggerConfiguration Value { get; }
+	protected SerilogLoggerOptions(bool addBasicOption)
+	{
+		if (addBasicOption)
+		{
+			Destructure.With<DestructuringPolicy>();
+		}
+	}
 }

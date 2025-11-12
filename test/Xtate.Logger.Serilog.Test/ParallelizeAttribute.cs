@@ -15,29 +15,4 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System;
-using Serilog;
-using Xtate.Core;
-using Xtate.IoC;
-
-namespace Xtate;
-
-[Obsolete]
-public static class LoggerSerilogExtensions
-{
-    public static void RegisterSerilogLogger(this IServiceCollection services)
-    {
-        services.RegisterSerilogLogger(configuration => configuration.WriteTo.Console());
-    }
-
-    public static void RegisterSerilogLogger(this IServiceCollection services, Action<LoggerConfiguration> options)
-    {
-        if (services.IsRegistered<SerilogLogWriter>())
-        {
-            return;
-        }
-
-        services.AddTransient(_ => new SerilogLoggerOptions());
-        services.AddImplementation<SerilogLogWriter>().For<ILogWriter>();
-    }
-}
+[assembly: global::Microsoft.VisualStudio.TestTools.UnitTesting.Parallelize(Scope = global::Microsoft.VisualStudio.TestTools.UnitTesting.ExecutionScope.MethodLevel)]
