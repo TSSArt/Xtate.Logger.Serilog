@@ -18,10 +18,12 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog;
-using Xtate.Core;
+using Xtate.Interpreter;
+using Xtate.Interpreter.DependencyInjection;
 using Xtate.IoC;
+using Xtate.StateMachine;
 
-namespace Xtate.Logger.Serilog.Test;
+namespace Xtate.Logging.Serilog.Test;
 
 [TestClass]
 public class SerilogTest

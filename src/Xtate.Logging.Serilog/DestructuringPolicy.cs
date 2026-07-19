@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Serilog.Core;
 using Serilog.Events;
-using Xtate.Core;
+using Xtate.DataTypes;
+using Xtate.StateMachine;
 
 namespace Xtate;
 

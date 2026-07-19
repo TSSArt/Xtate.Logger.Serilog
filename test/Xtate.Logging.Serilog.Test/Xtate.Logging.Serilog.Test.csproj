@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Xtate.Logger.Serilog\Xtate.Logger.Serilog.csproj" />
+		<ProjectReference Include="..\..\src\Xtate.Logging.Serilog\Xtate.Logging.Serilog.csproj" />
 	</ItemGroup>
 
 </Project>

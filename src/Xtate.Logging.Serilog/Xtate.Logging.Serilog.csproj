@@ -4,8 +4,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0;net9.0;net8.0;netstandard2.0;net462</TargetFrameworks>
-		<PackageId>Xtate.Logger.Serilog</PackageId>
-		<RepositoryUrl>https://github.com/TSSArt/Xtate.Logger.Serilog</RepositoryUrl>
+		<PackageId>Xtate.Logging.Serilog</PackageId>
+		<RepositoryUrl>https://github.com/TSSArt/Xtate.Logging.Serilog</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

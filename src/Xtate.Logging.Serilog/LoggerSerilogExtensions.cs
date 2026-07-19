@@ -15,16 +15,28 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using Xtate.Core;
+using System;
+using Serilog;
 using Xtate.IoC;
+using Xtate.Logging.Provider;
 
 namespace Xtate;
 
-public class SerilogLoggerModule : Module<LoggingModule, ToolsModule>
+[Obsolete]
+public static class LoggerSerilogExtensions
 {
-	protected override void AddServices()
-	{
-		Services.AddImplementation<SerilogLogWriter>().For<ILogWriter>();
-        Services.AddType<SerilogLoggerOptions>(Option.IfNotRegistered);
-	}
+    public static void RegisterSerilogLogger(this IServiceCollection services)
+    {
+        services.RegisterSerilogLogger(configuration => configuration.WriteTo.Console());
+    }
+
+    public static void RegisterSerilogLogger(this IServiceCollection services, Action<LoggerConfiguration> options)
+    {
+        if (services.IsRegistered<SerilogLogWriter>())
+        {
+            return;
+        }
+
+        services.AddSharedImplementation<SerilogLogWriter>(SharedWithin.Container).For<ILogProvider>();
+    }
 }
