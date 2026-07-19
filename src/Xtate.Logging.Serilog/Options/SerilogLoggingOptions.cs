@@ -1,4 +1,4 @@
-﻿// Copyright © 2019-2025 Sergii Artemenko
+﻿// Copyright © 2019-2026 Sergii Artemenko
 // 
 // This file is part of the Xtate project. <https://xtate.net/>
 // 
@@ -15,17 +15,21 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using Xtate.IoC;
-using Xtate.IoC.DependencyInjection;
-using Xtate.Logging.DependencyInjection;
-using Xtate.Logging.Provider;
+using Serilog;
+using Xtate.Logging.Serilog.Internal;
 
-namespace Xtate;
+namespace Xtate.Logging.Serilog;
 
-public class SerilogLoggerModule : Module<LoggingModule, IoCModule>
+[InstantiatedByIoC]
+public class SerilogLoggingOptions : LoggerConfiguration
 {
-	protected override void AddServices()
-	{
-		Services.AddSharedImplementation<SerilogLogWriter>(SharedWithin.Container).For<ILogProvider>();
-	}
+    public SerilogLoggingOptions() : this(true) { }
+
+    protected SerilogLoggingOptions(bool addBasicOption)
+    {
+        if (addBasicOption)
+        {
+            Destructure.With<DestructuringPolicy>();
+        }
+    }
 }

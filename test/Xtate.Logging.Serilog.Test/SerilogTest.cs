@@ -21,6 +21,8 @@ using Serilog;
 using Xtate.Interpreter;
 using Xtate.Interpreter.DependencyInjection;
 using Xtate.IoC;
+using Xtate.IoC.Options.DependencyInjection;
+using Xtate.Logging.Serilog.DependencyInjection;
 using Xtate.StateMachine;
 
 namespace Xtate.Logging.Serilog.Test;
@@ -32,11 +34,13 @@ public class SerilogTest
     public async Task SimpleSerilogTest()
     {
         var services = new ServiceCollection();
-        services.RegisterSerilogLogger(options => options
-                                                  .MinimumLevel.Verbose()
-                                                  .WriteTo.Console()
-                                                  .WriteTo.Seq("http://127.0.0.1:5341"));
-        services.AddModule<StateMachineInterpreterModule>();
+        services.Configure<SerilogLoggingOptions>(options => options
+                                                             .MinimumLevel.Verbose()
+                                                             .WriteTo.Console()
+                                                             .WriteTo.Seq("http://127.0.0.1:5341")
+													  );
+		services.AddModule<StateMachineInterpreterModule>();
+		services.AddModule<SerilogLoggingModule>();
         services.AddShared<IStateMachine>(
             SharedWithin.Container, _ => new StateMachineEntity
                                          {

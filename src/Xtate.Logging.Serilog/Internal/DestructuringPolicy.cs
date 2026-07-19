@@ -1,4 +1,4 @@
-﻿// Copyright © 2019-2025 Sergii Artemenko
+﻿// Copyright © 2019-2026 Sergii Artemenko
 // 
 // This file is part of the Xtate project. <https://xtate.net/>
 // 
@@ -15,15 +15,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Serilog.Core;
 using Serilog.Events;
 using Xtate.DataTypes;
 using Xtate.StateMachine;
 
-namespace Xtate;
+namespace Xtate.Logging.Serilog.Internal;
 
 public class DestructuringPolicy : IDestructuringPolicy
 {
