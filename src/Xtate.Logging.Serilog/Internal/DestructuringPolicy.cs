@@ -27,135 +27,135 @@ public class DestructuringPolicy : IDestructuringPolicy
 {
 #region Interface IDestructuringPolicy
 
-    public bool TryDestructure(object value, ILogEventPropertyValueFactory propertyValueFactory, [NotNullWhen(true)] out LogEventPropertyValue? result)
-    {
-        switch (value)
-        {
-            case DataModelList list:
-                result = GetLogEventPropertyValue(list);
+	public bool TryDestructure(object value, ILogEventPropertyValueFactory propertyValueFactory, [NotNullWhen(true)] out LogEventPropertyValue? result)
+	{
+		switch (value)
+		{
+			case DataModelList list:
+				result = GetLogEventPropertyValue(list);
 
-                return true;
+				return true;
 
-            case ILazyValue lazyValue:
-                result = GetLogEventPropertyValue(lazyValue.Value);
+			case ILazyValue lazyValue:
+				result = GetLogEventPropertyValue(lazyValue.Value);
 
-                return true;
+				return true;
 
-            case IIdentifier identifier:
-                result = new ScalarValue(identifier.Value);
+			case IIdentifier identifier:
+				result = new ScalarValue(identifier.Value);
 
-                return true;
+				return true;
 
-            case EventName eventName:
-                result = new ScalarValue(eventName.ToString());
+			case EventName eventName:
+				result = new ScalarValue(eventName.ToString());
 
-                return true;
+				return true;
 
-            case EventDescriptor eventDescriptor:
-                result = new ScalarValue(eventDescriptor.ToString());
+			case EventDescriptor eventDescriptor:
+				result = new ScalarValue(eventDescriptor.ToString());
 
-                return true;
+				return true;
 
-            default:
-                result = null;
+			default:
+				result = null;
 
-                return false;
-        }
-    }
+				return false;
+		}
+	}
 
 #endregion
 
-    private static LogEventPropertyValue GetLogEventPropertyValue(in DataModelValue value) =>
-        value.Type switch
-        {
-            DataModelValueType.Undefined => new ScalarValue(value.ToObject()),
-            DataModelValueType.Null      => new ScalarValue(value.ToObject()),
-            DataModelValueType.String    => new ScalarValue(value.ToObject()),
-            DataModelValueType.Number    => new ScalarValue(value.ToObject()),
-            DataModelValueType.DateTime  => new ScalarValue(value.ToObject()),
-            DataModelValueType.Boolean   => new ScalarValue(value.ToObject()),
-            DataModelValueType.List      => GetLogEventPropertyValue(value.AsList()),
-            _                            => throw new InvalidOperationException()
-        };
+	private static LogEventPropertyValue GetLogEventPropertyValue(in DataModelValue value) =>
+		value.Type switch
+		{
+			DataModelValueType.Undefined => new ScalarValue(value.ToObject()),
+			DataModelValueType.Null      => new ScalarValue(value.ToObject()),
+			DataModelValueType.String    => new ScalarValue(value.ToObject()),
+			DataModelValueType.Number    => new ScalarValue(value.ToObject()),
+			DataModelValueType.DateTime  => new ScalarValue(value.ToObject()),
+			DataModelValueType.Boolean   => new ScalarValue(value.ToObject()),
+			DataModelValueType.List      => GetLogEventPropertyValue(value.AsList()),
+			_                            => throw new InvalidOperationException()
+		};
 
-    private static LogEventPropertyValue GetLogEventPropertyValue(DataModelList list)
-    {
-        var index = 0;
+	private static LogEventPropertyValue GetLogEventPropertyValue(DataModelList list)
+	{
+		var index = 0;
 
-        foreach (var entry in list.Entries)
-        {
-            if (index ++ != entry.Index)
-            {
-                return new StructureValue(EnumerateEntries(true));
-            }
-        }
+		foreach (var entry in list.Entries)
+		{
+			if (index ++ != entry.Index)
+			{
+				return new StructureValue(EnumerateEntries(true));
+			}
+		}
 
-        if (list.GetMetadata() is not null)
-        {
-            return new StructureValue(EnumerateEntries(false));
-        }
+		if (list.GetMetadata() is not null)
+		{
+			return new StructureValue(EnumerateEntries(false));
+		}
 
-        foreach (var entry in list.Entries)
-        {
-            if (entry.Key is not null || entry.Metadata is not null)
-            {
-                return new StructureValue(EnumerateEntries(false));
-            }
-        }
+		foreach (var entry in list.Entries)
+		{
+			if (entry.Key is not null || entry.Metadata is not null)
+			{
+				return new StructureValue(EnumerateEntries(false));
+			}
+		}
 
-        if (list.Count == 0)
-        {
-            return new StructureValue([]);
-        }
+		if (list.Count == 0)
+		{
+			return new StructureValue([]);
+		}
 
-        return new SequenceValue(EnumerateValues());
+		return new SequenceValue(EnumerateValues());
 
-        IEnumerable<LogEventProperty> EnumerateEntries(bool showIndex)
-        {
-            foreach (var entry in list.Entries)
-            {
-                var name = GetName(entry.Key);
+		IEnumerable<LogEventProperty> EnumerateEntries(bool showIndex)
+		{
+			foreach (var entry in list.Entries)
+			{
+				var name = GetName(entry.Key);
 
-                yield return new LogEventProperty(name, GetLogEventPropertyValue(entry.Value));
+				yield return new LogEventProperty(name, GetLogEventPropertyValue(entry.Value));
 
-                if (showIndex)
-                {
-                    yield return new LogEventProperty(name + @":(index)", new ScalarValue(entry.Index));
-                }
+				if (showIndex)
+				{
+					yield return new LogEventProperty(name + @":(index)", new ScalarValue(entry.Index));
+				}
 
-                if (entry.Metadata is { } entryMetadata)
-                {
-                    yield return new LogEventProperty(name + @":(meta)", GetLogEventPropertyValue(entryMetadata));
-                }
-            }
+				if (entry.Metadata is { } entryMetadata)
+				{
+					yield return new LogEventProperty(name + @":(meta)", GetLogEventPropertyValue(entryMetadata));
+				}
+			}
 
-            if (list.GetMetadata() is { } metadata)
-            {
-                yield return new LogEventProperty(name: @"(meta)", GetLogEventPropertyValue(metadata));
-            }
-        }
+			if (list.GetMetadata() is { } metadata)
+			{
+				yield return new LogEventProperty(name: @"(meta)", GetLogEventPropertyValue(metadata));
+			}
+		}
 
-        IEnumerable<LogEventPropertyValue> EnumerateValues()
-        {
-            foreach (var value in list.Values)
-            {
-                yield return GetLogEventPropertyValue(value);
-            }
-        }
-    }
+		IEnumerable<LogEventPropertyValue> EnumerateValues()
+		{
+			foreach (var value in list.Values)
+			{
+				yield return GetLogEventPropertyValue(value);
+			}
+		}
+	}
 
-    private static string GetName(string? key)
-    {
-        if (key is null)
-        {
-            return @"(null)";
-        }
+	private static string GetName(string? key)
+	{
+		if (key is null)
+		{
+			return @"(null)";
+		}
 
-        if (string.IsNullOrWhiteSpace(key))
-        {
-            return @"(" + key + @")";
-        }
+		if (string.IsNullOrWhiteSpace(key))
+		{
+			return @"(" + key + @")";
+		}
 
-        return key;
-    }
+		return key;
+	}
 }

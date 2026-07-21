@@ -23,13 +23,13 @@ namespace Xtate.Logging.Serilog;
 [InstantiatedByIoC]
 public class SerilogLoggingOptions : LoggerConfiguration
 {
-    public SerilogLoggingOptions() : this(true) { }
+	public SerilogLoggingOptions() : this(true) { }
 
-    protected SerilogLoggingOptions(bool addBasicOption)
-    {
-        if (addBasicOption)
-        {
-            Destructure.With<DestructuringPolicy>();
-        }
-    }
+	protected SerilogLoggingOptions(bool addBasicOption)
+	{
+		if (addBasicOption)
+		{
+			Destructure.With<DestructuringPolicy>();
+		}
+	}
 }

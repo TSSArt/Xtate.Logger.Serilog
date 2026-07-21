@@ -25,8 +25,8 @@ namespace Xtate.Logging.Serilog.DependencyInjection;
 [InstantiatedByIoC]
 public class SerilogLoggingModule : Module<LoggingModule>
 {
-    protected override void AddServices()
-    {
-        Services.AddSharedImplementation<SerilogLogWriter>(SharedWithin.Container).For<ILogProvider>();
-    }
+	protected override void AddServices()
+	{
+		Services.AddSharedImplementation<SerilogLogWriter>(SharedWithin.Container).For<ILogProvider>();
+	}
 }

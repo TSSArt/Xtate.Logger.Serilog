@@ -1,4 +1,4 @@
-﻿// Copyright © 2019-2025 Sergii Artemenko
+﻿// Copyright © 2019-2026 Sergii Artemenko
 // 
 // This file is part of the Xtate project. <https://xtate.net/>
 // 
@@ -30,36 +30,35 @@ namespace Xtate.Logging.Serilog.Test;
 [TestClass]
 public class SerilogTest
 {
-    [TestMethod]
-    public async Task SimpleSerilogTest()
-    {
-        var services = new ServiceCollection();
-        services.Configure<SerilogLoggingOptions>(options => options
-                                                             .MinimumLevel.Verbose()
-                                                             .WriteTo.Console()
-                                                             .WriteTo.Seq("http://127.0.0.1:5341")
-													  );
+	[TestMethod]
+	public async Task SimpleSerilogTest()
+	{
+		var services = new ServiceCollection();
+		services.Configure<SerilogLoggingOptions>(options => options
+															 .MinimumLevel.Verbose()
+															 .WriteTo.Console()
+															 .WriteTo.Seq("http://127.0.0.1:5341"));
 		services.AddModule<StateMachineInterpreterModule>();
 		services.AddModule<SerilogLoggingModule>();
-        services.AddShared<IStateMachine>(
-            SharedWithin.Container, _ => new StateMachineEntity
-                                         {
-                                             Name = "MyName",
-                                             States =
-                                             [
-                                                 new FinalEntity
-                                                 {
-                                                     Id = Identifier.FromString("Id1")
-                                                 }
-                                             ]
-                                         });
+		services.AddShared<IStateMachine>(
+			SharedWithin.Container, _ => new StateMachineEntity
+										 {
+											 Name = "MyName",
+											 States =
+											 [
+												 new FinalEntity
+												 {
+													 Id = Identifier.FromString("Id1")
+												 }
+											 ]
+										 });
 
-        var provider = services.BuildProvider();
+		var provider = services.BuildProvider();
 
-        var smi = await provider.GetRequiredService<IStateMachineInterpreter>();
+		var smi = await provider.GetRequiredService<IStateMachineInterpreter>();
 
-        await smi.Run();
+		await smi.Run();
 
-        await Disposer.DisposeAsync(provider);
-    }
+		await Disposer.DisposeAsync(provider);
+	}
 }
