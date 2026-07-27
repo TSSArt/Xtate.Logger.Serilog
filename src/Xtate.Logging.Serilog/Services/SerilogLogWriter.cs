@@ -73,7 +73,9 @@ public class SerilogLogWriter(IOptions<SerilogLoggingOptions> options) : ILogPro
 			logger = logger.ForContext(new ParametersLogEventEnricher(prms));
 		}
 
+#pragma warning disable CA2254
 		logger.Write(GetLogEventLevel(level), exception, message ?? string.Empty);
+#pragma warning restore CA2254
 
 		return default;
 	}
